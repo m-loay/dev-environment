@@ -11,7 +11,7 @@ return {
         runner = "pytest",
 
         dap = {
-          justMyCode = false,
+          justMyCode = true,
         },
       }
 
