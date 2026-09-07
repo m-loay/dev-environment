@@ -121,7 +121,7 @@ config/
         ├── xml.lua             lemminx + xml parser
         ├── git.lua             diffview
         ├── ai.lua              sidekick: Claude Code / Codex
-        └── neogen.lua          docstring generation
+        ├── neogen.lua          docstring generation
         └── noice.lua           change pop-up cmdline to bottomline toolbar
 ```
 
