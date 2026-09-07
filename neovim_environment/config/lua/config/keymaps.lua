@@ -147,3 +147,46 @@ map("n", "<leader>rp", function()
     env = terminal_env(),
   })
 end, { desc = "Run Python File" })
+
+-- ---------------------------------------------------------------------------
+-- Tests / pytest
+-- ---------------------------------------------------------------------------
+
+map("n", "<leader>tt", function()
+  require("neotest").run.run()
+end, { desc = "Run Nearest Test" })
+
+map("n", "<leader>tf", function()
+  require("neotest").run.run(vim.fn.expand("%"))
+end, { desc = "Run Test File" })
+
+map("n", "<leader>ta", function()
+  require("neotest").run.run(vim.fn.getcwd())
+end, { desc = "Run All Tests" })
+
+map("n", "<leader>ts", function()
+  require("neotest").summary.toggle()
+end, { desc = "Toggle Test Explorer" })
+
+map("n", "<leader>to", function()
+  require("neotest").output.open({ enter = true })
+end, { desc = "Show Test Output" })
+
+map("n", "<leader>tO", function()
+  require("neotest").output_panel.toggle()
+end, { desc = "Toggle Test Output Panel" })
+
+map("n", "<leader>td", function()
+  require("neotest").run.run({
+    suite = false,
+    strategy = "dap",
+  })
+end, { desc = "Debug Nearest Test" })
+
+map("n", "]t", function()
+  require("neotest").jump.next({ status = "failed" })
+end, { desc = "Next Failed Test" })
+
+map("n", "[t", function()
+  require("neotest").jump.prev({ status = "failed" })
+end, { desc = "Previous Failed Test" })

@@ -25,3 +25,7 @@ vim.opt.clipboard = "unnamedplus"
 -- Persist undo across sessions; cheap and repeatedly useful on a server.
 vim.opt.undofile = true
 vim.opt.undolevels = 10000
+
+-- fix swap and undo
+vim.opt.swapfile = false
+vim.opt.undofile = true
