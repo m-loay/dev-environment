@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# stubs.txt — type stubs consumed by basedpyright for completion and hovers.
+#
+# Rules used to decide what belongs here:
+#
+#   1. If the library ships `py.typed` (numpy, matplotlib, pydantic, fastapi,
+#      mlflow, httpx, attrs), DO NOT add a stub package. The inline types are
+#      always in sync with the installed version.
+#
+#   2. If the library ships no types but has good, readable source
+#      (scikit-learn, opencv, xgboost, lightgbm, dvc), rely on basedpyright's
+#      `useLibraryCodeForTypes = true`. Source inference beats a stale stub.
+#
+#   3. Only add a stub package when the library is (a) untyped AND (b) hostile
+#      to source inference — lazy module loading, C extensions, generated APIs.
+#      TensorFlow and boto3 are the two that matter here.
+#
+# Explicitly NOT installed:
+#   scikit-learn-stubs — third-party repackage of Microsoft's stubs, last
+#   released 0.0.3 (Aug 2025), and NOT marked as a partial stub package. It
+#   shadows the real scikit-learn entirely, so anything added to sklearn since
+#   then vanishes from completion. Source inference is strictly better.
+# ---------------------------------------------------------------------------
+
+# Pandas public API. Version-sensitive: the 3.0.x stubs describe pandas 3.x.
+# If a project is pinned to pandas 2.x, pin this to `pandas-stubs~=2.2` too.
+pandas-stubs
+
+# SciPy ships no py.typed; scipy-stubs tracks SciPy release-for-release.
+scipy-stubs
+
+# Generic typeshed stubs for untyped-but-common dependencies.
+types-PyYAML
+types-requests
+types-tqdm
+types-psutil
+
+# boto3/botocore are code-generated at runtime; without stubs, every client
+# method is Unknown. `types-boto3` is the maintained successor to boto3-stubs.
+types-boto3

@@ -1,0 +1,9 @@
+# Local build artefacts — nothing generated should be committed.
+*.log
+*.bak.*
+*.lock.txt.tmp
+
+# Editor / OS noise
+.DS_Store
+*.swp
+__pycache__/

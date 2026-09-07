@@ -1,0 +1,14 @@
+# ---------------------------------------------------------------------------
+# aws-extra.txt — SageMaker SDK, split out of base.txt.
+#
+# Why it is not in base: `sagemaker` pins protobuf, numpy and cloudpickle
+# narrowly. Resolved next to TensorFlow it either fails outright or silently
+# downgrades numpy, which then breaks scipy/pandas wheels compiled against the
+# newer ABI. Install it into a project venv, or into ml-dev only if you
+# actually need the SDK and are willing to re-verify with `pip check`.
+#
+#   conda activate ml-dev
+#   pip install -r requirements/aws-extra.txt && pip check
+# ---------------------------------------------------------------------------
+
+sagemaker

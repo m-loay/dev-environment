@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------------
+# llm-dev.txt — LLM/agentic work: transformers, LangChain/LangGraph, RAG.
+#
+# Layer:  base.txt + stubs.txt + this file
+# Python: 3.12
+#
+# Deliberately separate from ml-dev: transformers/accelerate/vLLM pin torch
+# versions, TensorFlow pins protobuf and numpy. Keeping them in one env makes
+# every upgrade a resolver negotiation. Two envs, one switch in Neovim.
+# ---------------------------------------------------------------------------
+
+-r base.txt
+-r stubs.txt
+
+# Numerical / data
+numpy
+scipy
+pandas
+scikit-learn
+pyarrow
+Pillow
+
+# Hugging Face / model training
+torch
+transformers
+accelerate
+datasets
+evaluate
+peft
+trl
+sentence-transformers
+huggingface-hub
+tokenizers
+safetensors
+sentencepiece
+tiktoken
+einops
+
+# Model APIs
+openai
+anthropic
+cohere
+litellm
+
+# LangChain / LangGraph
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-openai
+langchain-anthropic
+langgraph
+langsmith
+
+# Vector stores / retrieval
+qdrant-client
+chromadb
+faiss-cpu
+
+# Documents / parsing
+pymupdf
+pypdf
+beautifulsoup4
+lxml
+
+# Databases (production RAG stack: Postgres + Qdrant)
+SQLAlchemy
+alembic
+asyncpg
+psycopg2-binary
+pymongo
+motor

@@ -1,0 +1,80 @@
+# ---------------------------------------------------------------------------
+# base.txt — shared by every environment.
+#
+# Everything here is framework-agnostic: configuration, serving, storage,
+# tooling, tests. Nothing in this file pins a numeric/DL stack, so it can be
+# resolved alongside either the ML or the LLM layer without conflict.
+# ---------------------------------------------------------------------------
+
+# Configuration / validation
+PyYAML
+ruamel.yaml
+hydra-core
+omegaconf
+pydantic
+pydantic-settings
+python-dotenv
+attrs
+
+# MLOps / data versioning
+mlflow
+dvc[s3]
+dvclive
+datachain[remote]
+GitPython
+
+# AWS / object storage
+# NOTE: `sagemaker` is deliberately NOT here. It pins protobuf/numpy narrowly
+# and is a frequent cause of unsolvable resolutions next to TensorFlow.
+# Install it per project, or use requirements/aws-extra.txt.
+boto3
+botocore
+s3fs
+fsspec
+
+# Application / API
+fastapi
+uvicorn[standard]
+httpx
+aiohttp
+python-multipart
+orjson
+
+# CLI / logging / monitoring
+typer
+rich
+structlog
+loguru
+tqdm
+psutil
+nvidia-ml-py
+
+# Jupyter / interactive work
+ipython
+ipykernel
+jupyterlab
+ipywidgets
+ipympl
+jupytext
+jupyter-client
+
+# Development / testing
+pytest
+pytest-asyncio
+pytest-cov
+pytest-mock
+pytest-xdist
+pytest-timeout
+debugpy
+black
+ruff
+isort
+mypy
+pre-commit
+
+# Neovim host (required by a few plugins that shell out to Python)
+pynvim
+
+# Markdown tooling
+mdformat
+mdformat-gfm

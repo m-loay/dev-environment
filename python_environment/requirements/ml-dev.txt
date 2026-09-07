@@ -1,0 +1,48 @@
+# ---------------------------------------------------------------------------
+# ml-dev.txt — classical ML, deep learning, computer vision, signal work.
+#
+# Layer:  base.txt + stubs.txt + this file
+# Python: 3.12  (TensorFlow ships cp310-cp313; numpy 2.5 / scipy 1.18 need
+#                >= 3.12 — 3.12 is the only version that satisfies both)
+# ---------------------------------------------------------------------------
+
+-r base.txt
+-r stubs.txt
+
+# Numerical / classical ML
+numpy
+scipy
+pandas
+scikit-learn
+xgboost
+lightgbm
+joblib
+optuna
+
+# Deep learning
+# TensorFlow was missing from the original requirements, which is why nothing
+# under `tf.` ever completed. The CPU wheel is installed by default; the CUDA
+# build is opt-in via gpu-optional.txt to keep this file resolvable everywhere.
+tensorflow
+
+# TensorFlow types. Marked `partial` in py.typed, so basedpyright falls back to
+# real source for anything unstubbed — and, critically, it stubs
+# tensorflow/keras/*, which cannot be resolved from source because
+# TensorFlow lazy-loads `tf.keras` in its __init__.
+types-tensorflow
+
+# Data formats
+h5py
+pyarrow
+fastparquet
+openpyxl
+
+# Computer vision
+Pillow
+opencv-python-headless
+
+# Visualization
+matplotlib
+seaborn
+netron
+types-seaborn

@@ -1,0 +1,93 @@
+# ---------------------------------------------------------------------------
+# Drop this into the root of a project and edit `venv`.
+#
+# Why it is needed even though venv-selector already works:
+# venv-selector injects `settings.python.pythonPath` into the running LSP
+# client. That lives and dies with the Neovim session and is invisible to the
+# basedpyright CLI, to pre-commit, to CI, and to Claude Code. This file is the
+# durable source of truth; venv-selector then just agrees with it.
+# ---------------------------------------------------------------------------
+
+[tool.basedpyright]
+# Point at the conda env for this project. `venvPath` is the directory that
+# CONTAINS the env, `venv` is its name.
+venvPath = "~/miniforge3/envs"
+venv = "ml-dev"
+
+# Directories added to the import search path. Needed for a flat layout where
+# scripts sit next to a shared `utils.py`: without it, `from utils import ...`
+# is an implicit relative import that resolves only because the interpreter
+# puts the script's own directory on sys.path. That works for `python foo.py`
+# and breaks the moment anything imports the file as a module.
+extraPaths = ["."]
+
+include = ["src", "tests"]
+exclude = [
+  "**/__pycache__",
+  "**/.ipynb_checkpoints",
+  ".dvc",
+  "data",
+  "outputs",
+  "best_model",
+  "mlruns",
+]
+
+# basedpyright defaults to typeCheckingMode = "recommended", which its own docs
+# describe as essentially "all". Against a scientific stack where most
+# libraries ship no types, that produces a wall of diagnostics rather than
+# useful signal. "standard" is pyright's normal behaviour.
+typeCheckingMode = "standard"
+
+# This is the setting that makes completion work for untyped-but-readable
+# packages (scikit-learn, cv2, xgboost, mlflow): infer from installed source.
+useLibraryCodeForTypes = true
+autoSearchPaths = true
+autoImportCompletions = true
+
+# Silence the rules that only fire because third-party libraries are untyped.
+reportMissingTypeStubs = "none"
+reportUnknownMemberType = "none"
+reportUnknownVariableType = "none"
+reportUnknownArgumentType = "none"
+reportUnknownParameterType = "none"
+reportAny = "none"
+reportExplicitAny = "none"
+reportUnusedCallResult = "none"
+reportPrivateImportUsage = "none"
+
+# ---------------------------------------------------------------------------
+# Formatter alignment.
+#
+# conform runs ruff_fix -> isort -> black for Python. Without profile = "black",
+# isort's default grid wrapping and black's magic trailing comma disagree on
+# multi-line imports and every save produces churn.
+# ---------------------------------------------------------------------------
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+# `I` (isort rules) is deliberately absent: isort owns import order in the
+# conform chain. Enabling both makes them fight on every format.
+select = ["E", "F", "W", "B", "UP", "SIM", "C4", "ARG", "PTH"]
+ignore = [
+  "E501",   # black owns line length
+  # EXE002 ("file is executable but no shebang") fires on every file when the
+  # project lives on an exFAT/NTFS mount: those filesystems carry no POSIX
+  # permission bits, so the driver reports 0777 for everything. The alternative
+  # to ignoring it is remounting with fmask=0133.
+  "EXE002",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"

@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# gpu-optional.txt — heavy GPU packages, intentionally NOT part of the default
+# install. These are sensitive to CUDA version, GPU architecture, compiler and
+# the exact torch/TensorFlow build.
+#
+# Install per project, only after confirming compatibility:
+#
+#   conda activate llm-dev
+#   pip install -r requirements/gpu-optional.txt
+#
+# Hardware notes for this repo's target machines:
+#   RTX 5070 Ti  -> Blackwell, sm_120: needs CUDA 12.8+ builds. flash-attn and
+#                   bitsandbytes wheels lag new architectures by months; check
+#                   the release notes before assuming a wheel exists.
+#   RTX 2060     -> Turing, sm_75: fine for bitsandbytes/xformers, too little
+#                   VRAM (6 GB) for vllm on anything non-trivial.
+#   RTX PRO 500  -> Blackwell mobile, 4 GB usable: treat as CPU-only for LLMs.
+# ---------------------------------------------------------------------------
+
+# TensorFlow with bundled CUDA libraries (replaces plain `tensorflow`).
+# tensorflow[and-cuda]
+
+# PyTorch CUDA builds come from the PyTorch index, not PyPI:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+
+# bitsandbytes
+# xformers
+# flash-attn
+# vllm

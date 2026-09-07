@@ -1,0 +1,60 @@
+# ---------------------------------------------------------------------------
+# constraints.txt — version bounds applied to EVERY environment.
+#
+# A constraints file installs nothing. It only bounds a package if something
+# else pulls it in, which makes it the right place for conflicts that arrive
+# through transitive dependencies rather than from anything listed directly.
+#
+# ---------------------------------------------------------------------------
+# The fsspec cluster
+# ---------------------------------------------------------------------------
+# fsspec has a family of filesystem backends that each pin it, and `datasets`
+# caps it from above. At their latest releases the ranges do not all overlap:
+#
+#     s3fs 2026.7.0     ->  fsspec >= 2026.7.0, < 2026.7.1   (exact minor)
+#     gcsfs 2026.8.0    ->  fsspec >= 2026.7.0
+#     datasets 5.0.1    ->  fsspec[http] <= 2026.6.0
+#
+# pip does not fail on this. It backtracks until it finds a consistent set, and
+# the set it lands on is 2023-era: s3fs 2023.10.0 + fsspec 2023.10.0 +
+# datasets 2.15.0. Every declared requirement is satisfied, so `pip check`
+# reports the environment as clean while it is broken.
+#
+# The breakage only appears at import time: datasets <= 2.15 calls
+# pyarrow.PyExtensionType, removed from modern pyarrow, giving
+#     AttributeError: module 'pyarrow' has no attribute 'PyExtensionType'
+#
+# 2026.6.0 is the point where all four ranges overlap:
+#     fsspec  2026.6.0
+#     s3fs    2026.6.0  ->  fsspec >= 2026.6.0, < 2026.6.1   ✓
+#     gcsfs   2026.7.0  ->  fsspec >= 2026.6.0               ✓
+#     datasets 5.0.1    ->  fsspec <= 2026.6.0               ✓
+#
+# adlfs needs no bound: it asks only for fsspec >= 2023.12.0.
+#
+# The `datasets` floor is a tripwire. If a future release removes the overlap,
+# pip fails loudly here instead of silently reinstalling a three-year-old
+# datasets that passes every automated check.
+fsspec<=2026.6.0
+s3fs<=2026.6.0
+gcsfs<=2026.7.0
+datasets>=5.0
+
+# ---------------------------------------------------------------------------
+# Where the backends come from
+# ---------------------------------------------------------------------------
+# `datachain` (base.txt) requires s3fs, gcsfs AND adlfs as ordinary
+# dependencies, so all three land in every environment including llm-dev, which
+# has no use for them. Moving `datachain[remote]` and `dvc[s3]` out of base.txt
+# into ml-dev.txt removes the conflict at its source rather than pinning around
+# it. Do that if llm-dev never needs DVC or DataChain; keep these bounds if it
+# does.
+#
+# When bumping, check the overlap before trusting pip:
+#   python - <<'PY'
+#   import json, urllib.request as u
+#   for p in ("fsspec", "s3fs", "gcsfs", "datasets"):
+#       d = json.load(u.urlopen(f"https://pypi.org/pypi/{p}/json"))["info"]
+#       print(p, d["version"],
+#             [r for r in (d.get("requires_dist") or []) if r.startswith("fsspec")])
+#   PY

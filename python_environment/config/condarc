@@ -1,0 +1,30 @@
+# Installed to ~/.condarc by 10-install-conda.sh (existing file is backed up).
+
+channels:
+  - conda-forge
+
+channel_priority: strict
+
+# THE fix for "Ctrl+/ opens a terminal in base instead of my selected env".
+#
+# `conda init` puts an eval of `conda shell.bash hook` in ~/.bashrc. When
+# auto-activation is on, that hook unconditionally appends `conda activate base`
+# (conda/activate.py: `builder.append(f"conda activate '{...}'")`). Activating
+# base strips the currently-active prefix from PATH and prepends base/bin — so
+# the PATH that Neovim's venv-selector handed to the terminal is destroyed
+# before you ever see a prompt.
+#
+# `auto_activate` is the conda >= 25.x name; `auto_activate_base` is the
+# older alias. Both are written so the file works on either version.
+auto_activate: false
+auto_activate_base: false
+
+# Do not let conda consider pip metadata when solving. Default, made explicit:
+# mixing the two resolvers is the usual cause of an env that solves but then
+# fails at import time.
+pip_interop_enabled: false
+
+# Keep solves reproducible and quiet.
+always_yes: false
+changeps1: true
+solver: libmamba
