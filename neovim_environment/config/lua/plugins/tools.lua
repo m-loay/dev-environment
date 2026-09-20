@@ -9,8 +9,6 @@ return {
         -- Python
         "basedpyright",
         "ruff",
-        "black",
-        "isort",
         "debugpy",
 
         -- Markdown / YAML / JSON / TOML / Docker

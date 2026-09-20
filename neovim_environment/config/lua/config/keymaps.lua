@@ -211,3 +211,37 @@ map("i", "<C-s>", function()
 end, {
   desc = "Format, Fix, and Save",
 })
+
+-- ---------------------------------------------------------------------------
+-- VS Code-style navigation
+--
+-- <C-p> and <C-b> already live in the "VS Code-like navigation" block above.
+-- F5/F6/F7/F9 are the debugger. Everything below is free of those.
+-- ---------------------------------------------------------------------------
+
+-- F12 family: definition / references / implementation.
+map("n", "<F12>", vim.lsp.buf.definition, { desc = "Go to Definition" })
+map("n", "<F2>", vim.lsp.buf.rename, { desc = "Rename Symbol" })
+
+-- Ctrl+G: go to line. Opens the command line primed with a colon; type the
+-- number and press Enter. This shadows the built-in "show file info" —
+-- <C-g> is rarely used for that, and :f still does it.
+map({ "n", "v" }, "<C-g>", ":", { desc = "Go to Line (type a number)" })
+
+-- Alt+Arrow: walk the jumplist. This is the actual VS Code back/forward —
+-- it steps through every gd / gI / gr jump, across files.
+map("n", "<M-Left>", "<C-o>", { desc = "Jump Back" })
+map("n", "<M-Right>", "<C-i>", { desc = "Jump Forward" })
+
+-- Close and switch "tabs". VS Code tabs are Neovim BUFFERS, not tabpages,
+-- so these operate on the bufferline you can see at the top.
+map("n", "<C-w>", function()
+  Snacks.bufdelete()
+end, { desc = "Close Buffer" })
+
+map("n", "<M-Up>", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
+map("n", "<M-Down>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+
+-- Ctrl+Tab: cycle buffers. Likely inert in a terminal — see the note below.
+map("n", "<C-Tab>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
+map("n", "<C-S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
