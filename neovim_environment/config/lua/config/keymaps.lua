@@ -190,3 +190,24 @@ end, { desc = "Next Failed Test" })
 map("n", "[t", function()
   require("neotest").jump.prev({ status = "failed" })
 end, { desc = "Previous Failed Test" })
+
+-- ---------------------------------------------------------------------------
+-- Format + fix + save
+-- ---------------------------------------------------------------------------
+
+local function format_and_save()
+  LazyVim.format({ force = true })
+  vim.cmd("write")
+end
+
+map("n", "<C-s>", format_and_save, {
+  desc = "Format, Fix, and Save",
+})
+
+map("i", "<C-s>", function()
+  vim.cmd("stopinsert")
+  format_and_save()
+  vim.cmd("startinsert")
+end, {
+  desc = "Format, Fix, and Save",
+})

@@ -4,7 +4,7 @@ vim.g.lazyvim_python_lsp = "basedpyright"
 vim.g.lazyvim_python_ruff = "ruff"
 
 -- Keep LazyVim automatic formatting enabled.
-vim.g.autoformat = true
+vim.g.autoformat = false
 
 -- VS Code-like absolute line numbers.
 vim.opt.number = true
